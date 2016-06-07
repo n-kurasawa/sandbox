@@ -1,5 +1,6 @@
 var camera, scene, renderer;
 var controls;
+var fall;
 
 init();
 render();
@@ -12,8 +13,8 @@ function init() {
   scene = new THREE.Scene();
 
   // camera
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.set(200, 100, 300);
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+  camera.position.set(400, 800, 1300);
   camera.lookAt(scene.position);
 
   // mesh
@@ -21,7 +22,15 @@ function init() {
     new THREE.BoxGeometry(50, 50, 50),
     new THREE.MeshLambertMaterial({color: 0x00ff80, overdraw: 0.5})
   );
+  mesh.position.set(0, 0, 0);
   scene.add(mesh);
+
+  fall = new THREE.Mesh(
+    new THREE.BoxGeometry(50, 50, 50),
+    new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
+  );
+  fall.position.set(0, 1000, 0);
+  scene.add(fall);
 
   // light
   // - 平行光
@@ -54,5 +63,7 @@ function init() {
 function render() {
   requestAnimationFrame(render);
   controls.update();
+
+  fall.position.y -= 10;
   renderer.render(scene, camera);
 }
