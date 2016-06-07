@@ -1,6 +1,6 @@
 var camera, scene, renderer;
 var controls;
-var fall;
+var block;
 
 init();
 render();
@@ -25,12 +25,35 @@ function init() {
   mesh.position.set(0, 0, 0);
   scene.add(mesh);
 
-  fall = new THREE.Mesh(
+  // block
+  block1 = new THREE.Mesh(
     new THREE.BoxGeometry(50, 50, 50),
     new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
   );
-  fall.position.set(0, 1000, 0);
-  scene.add(fall);
+  block1.position.set(0, 50, 0);
+  block2 = new THREE.Mesh(
+    new THREE.BoxGeometry(50, 50, 50),
+    new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
+  );
+  block2.position.set(0, 0, 0);
+  block3 = new THREE.Mesh(
+    new THREE.BoxGeometry(50, 50, 50),
+    new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
+  );
+  block3.position.set(50, 0, 0);
+  block4 = new THREE.Mesh(
+    new THREE.BoxGeometry(50, 50, 50),
+    new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
+  );
+  block4.position.set(50, -50, 0);
+
+  block = new THREE.Group();
+  block.position.y = 1000;
+  block.add(block1);
+  block.add(block2);
+  block.add(block3);
+  block.add(block4);
+  scene.add(block);
 
   // light
   // - 平行光
@@ -64,6 +87,10 @@ function render() {
   requestAnimationFrame(render);
   controls.update();
 
-  fall.position.y -= 10;
+  // block.position.y -= 10;
+  if (block.position.y > 0) {
+    block.position.y -= 10;
+  }
+
   renderer.render(scene, camera);
 }
