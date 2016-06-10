@@ -40,19 +40,13 @@ function init() {
   );
   block4.position.set(50, -50, 0);
 
-  block = new THREE.Group();
-  // block.position.y = 1000;
-  block.add(block1);
-  block.add(block2);
-  block.add(block3);
-  block.add(block4);
-  scene.add(block);
-
-  scene.add(block1);
-  scene.add(block2);
-  scene.add(block3);
-  scene.add(block4);
-
+  block_group = new THREE.Group();
+  block_group.position.y = 500;
+  block_group.add(block1);
+  block_group.add(block2);
+  block_group.add(block3);
+  block_group.add(block4);
+  scene.add(block_group);
 
   var block5 = new THREE.Mesh(
     new THREE.BoxGeometry(50, 50, 50),
@@ -108,7 +102,8 @@ function onClick(e) {
   raycaster.setFromCamera(mouse, camera);
 
   // 4. 光線にあたった物体を取得、操作
-  objs = raycaster.intersectObjects(scene.children);
+  objs = raycaster.intersectObjects(block_group.children);
+  // objs = raycaster.intersectObjects(scene.children);
   if (objs.length > 0) {
     objs[0].object.material.emissive = new THREE.Color(0x999999);
   }
@@ -117,5 +112,9 @@ function onClick(e) {
 function render() {
   requestAnimationFrame(render);
   controls.update();
+
+  if (block_group.position.y > 0) {
+    block_group.position.y -= 10;
+  }
   renderer.render(scene, camera);
 }
