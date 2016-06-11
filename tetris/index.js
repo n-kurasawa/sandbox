@@ -3,6 +3,11 @@ var controls;
 var block;
 var mouse = new THREE.Vector2(-2, -2);
 
+// ボタン
+var right;
+var left;
+var rrotate_box;
+
 init();
 render();
 
@@ -31,17 +36,23 @@ function init() {
   block2.position.set(50, 0, 0);
 
   block_group = new THREE.Group();
-  block_group.position.y = 1000;
+  block_group.position.y = 800;
   block_group.add(block1);
   block_group.add(block2);
   scene.add(block_group);
 
-  var block5 = new THREE.Mesh(
+  rotate_box = new THREE.Mesh(
     new THREE.BoxGeometry(50, 50, 50),
-    new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
+    new THREE.MeshLambertMaterial({color: 0x00ff80, overdraw: 0.5})
   );
-  block5.position.set(150, 150, 0);
-  scene.add(block5);
+  rotate_box.position.set(500, 270, 0);
+  scene.add(rotate_box);
+
+  // フォントローダー
+  var loader = new THREE.FontLoader();
+  loader.load('node_modules/three/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+    createText(font);
+  });
 
   // light
   // - 平行光
@@ -84,21 +95,54 @@ function onClick(e) {
   mouse.y = -(e.clientY - rect.top) / window.innerHeight * 2 + 1;
 
   var raycaster = new THREE.Raycaster();
-  var objs;
 
   // 3. マウスから3D空間に光線を射出
   raycaster.setFromCamera(mouse, camera);
 
   // 4. 光線にあたった物体を取得、操作
-  group_objs = raycaster.intersectObjects(block_group.children);
+  var group_objs = raycaster.intersectObjects(block_group.children);
   if (group_objs.length > 0) {
     block_group.rotation.z += Math.PI/2;
   }
 
-  objs = raycaster.intersectObjects(scene.children);
-  if (objs.length > 0) {
-    objs[0].object.material.emissive = new THREE.Color(0x999999);
+  var rotate_box_objs = raycaster.intersectObjects([rotate_box]);
+  if (rotate_box_objs.length > 0) {
+    block_group.rotation.z += Math.PI/2;
   }
+
+  var left_objs = raycaster.intersectObjects([left]);
+  if (left_objs.length > 0) {
+    block_group.position.x -= 50;
+  }
+
+  var right_objs = raycaster.intersectObjects([right]);
+  if (right_objs.length > 0) {
+    block_group.position.x += 50;
+  }
+}
+
+function createText(font) {
+  left = new THREE.Mesh(
+    new THREE.TextGeometry('Left', {
+      font: font,
+      size: 64,
+      height: 4
+    }),
+    new THREE.MeshBasicMaterial({ color: 0xf39800, side: THREE.DoubleSide })
+  );
+  left.position.set(250, 250, 0);
+  scene.add(left);
+
+  right = new THREE.Mesh(
+    new THREE.TextGeometry('Right', {
+      font: font,
+      size: 64,
+      height: 4
+    }),
+    new THREE.MeshBasicMaterial({ color: 0xf39800, side: THREE.DoubleSide })
+  );
+  right.position.set(600, 250, 0);
+  scene.add(right);
 }
 
 function render() {
