@@ -15,37 +15,25 @@ function init() {
 
   // camera
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
-  camera.position.set(400, 800, 1300);
+  camera.position.set(400, 1200, 1500);
   camera.lookAt(scene.position);
 
   // block
   var block1 = new THREE.Mesh(
-    new THREE.BoxGeometry(50, 50, 50),
+    new THREE.BoxGeometry(50, 100, 50),
     new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
   );
   block1.position.set(0, 50, 0);
   var block2 = new THREE.Mesh(
-    new THREE.BoxGeometry(50, 50, 50),
+    new THREE.BoxGeometry(50, 100, 50),
     new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
   );
-  block2.position.set(0, 0, 0);
-  var block3 = new THREE.Mesh(
-    new THREE.BoxGeometry(50, 50, 50),
-    new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
-  );
-  block3.position.set(50, 0, 0);
-  var block4 = new THREE.Mesh(
-    new THREE.BoxGeometry(50, 50, 50),
-    new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
-  );
-  block4.position.set(50, -50, 0);
+  block2.position.set(50, 0, 0);
 
   block_group = new THREE.Group();
-  block_group.position.y = 500;
+  block_group.position.y = 1000;
   block_group.add(block1);
   block_group.add(block2);
-  block_group.add(block3);
-  block_group.add(block4);
   scene.add(block_group);
 
   var block5 = new THREE.Mesh(
@@ -102,8 +90,12 @@ function onClick(e) {
   raycaster.setFromCamera(mouse, camera);
 
   // 4. 光線にあたった物体を取得、操作
-  objs = raycaster.intersectObjects(block_group.children);
-  // objs = raycaster.intersectObjects(scene.children);
+  group_objs = raycaster.intersectObjects(block_group.children);
+  if (group_objs.length > 0) {
+    block_group.rotation.z += Math.PI/2;
+  }
+
+  objs = raycaster.intersectObjects(scene.children);
   if (objs.length > 0) {
     objs[0].object.material.emissive = new THREE.Color(0x999999);
   }
@@ -114,7 +106,7 @@ function render() {
   controls.update();
 
   if (block_group.position.y > 0) {
-    block_group.position.y -= 10;
+    block_group.position.y -= 1;
   }
   renderer.render(scene, camera);
 }
