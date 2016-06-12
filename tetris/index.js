@@ -41,6 +41,25 @@ function init() {
   block_group.add(block2);
   scene.add(block_group);
 
+  //---------------------------
+  var block3 = new THREE.Mesh(
+    new THREE.BoxGeometry(50, 100, 50),
+    new THREE.MeshLambertMaterial({color: 0x8000ff, overdraw: 0.5})
+  );
+  block3.position.set(0, 50, 0);
+  var block4 = new THREE.Mesh(
+    new THREE.BoxGeometry(50, 100, 50),
+    new THREE.MeshLambertMaterial({color: 0x8000ff, overdraw: 0.5})
+  );
+  block4.position.set(50, 0, 0);
+
+  block_group2 = new THREE.Group();
+  block_group2.position.y = 0;
+  block_group2.add(block3);
+  block_group2.add(block4);
+  scene.add(block_group2);
+  //---------------------------
+
   rotate_box = new THREE.Mesh(
     new THREE.BoxGeometry(50, 50, 50),
     new THREE.MeshLambertMaterial({color: 0x00ff80, overdraw: 0.5})
