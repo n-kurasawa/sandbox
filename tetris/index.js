@@ -173,3 +173,37 @@ function render() {
   }
   renderer.render(scene, camera);
 }
+
+var zahyo = [
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [1,1,1,1,1,0,0,0]
+];
+
+
+function createBlock() {
+  return new THREE.Mesh(
+    new THREE.BoxGeometry(50, 50, 50),
+    new THREE.MeshLambertMaterial({color: 0x0080ff, overdraw: 0.5})
+  );
+}
+
+
+function zahyoToBlock() {
+  zahyo.forEach(function (outerArr, y) {
+    outerArr.forEach(function (value, x){
+      if (value === 1) {
+        var block = createBlock()
+        block.position.set(x * 50, y * 50, 0);
+        scene.add(block);
+      }
+    })
+  });
+}
+
+zahyoToBlock();
